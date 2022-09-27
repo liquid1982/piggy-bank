@@ -47,3 +47,7 @@ class PiggyBank {
     return finalAmount;
   }
 }
+
+globalThis.PiggyBank = PiggyBank;
+
+export default PiggyBank;
