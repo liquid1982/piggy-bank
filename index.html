@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Piggy Bank</title>
+    </style>
+    <script src="piggy.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      let piggy;
+
+      function create() {
+        const user = document.querySelector(".user-name").value;
+        piggy = new PiggyBank(user);
+        render("whole");
+      }
+
+      function confirmDeposit() {
+        const amount = document.querySelector(".deposit-amount").value;
+
+        try {
+          piggy.deposit(amount);
+          render("whole");
+          return;
+        } catch (error) {
+          alert(error.message);
+        }
+
+        render("deposit");
+      }
+
+      function confirmSmash() {
+        let finalAmount;
+        const user = document.querySelector(".user-name").value;
+
+        try {
+          finalAmount = piggy.smash(user);
+          alert(`Here's your ${finalAmount} coins, ${user}!`);
+          render("smashed");
+          return;
+        } catch (error) {
+          alert(error.message);
+        }
+
+        render("whole");
+      }
+
+      function render(state) {
+        const ui = {
+          start: `
+            <h1>Welcome!</h1>
+            <p>Please enter your name to create a piggy bank:</p>
+            <form onsubmit="create()">
+              <input type="text" class="user-name" />
+              <input type="submit" value="Create"/>
+            </form>
+          `,
+          whole: `
+            <h1 class="title">${piggy?.owner}'s Piggy Bank</h1>
+            <h3>Current amount: ${piggy?.amount}</h3>
+            <p>
+              <button onclick="render('deposit')">Deposit</button>
+              <button onclick="render('smash')">Smash</button>
+            </p>
+          `,
+          deposit: `
+            <h1 class="title">${piggy?.owner}'s Piggy Bank</h1>
+            <h3>How many coins do you want to deposit?</h3>
+            <form onsubmit="confirmDeposit()">
+              <input type="text" class="deposit-amount" />
+              <input type="submit" value="Confirm deposit" />
+            </form>
+          `,
+          smash: `
+            <h1>Who are you?</h1>
+            <form onsubmit="confirmSmash()">
+              <input type="text" class="user-name" />
+              <input type="submit" value="Continue" />
+            </form>
+          `,
+          smashed: `
+            <h1>${piggy?.owner}'s Piggy Bank has been smashed!</h1>
+          `,
+        };
+
+        document.querySelector("#root").innerHTML = ui[state];
+        document.querySelector("input")?.focus();
+      }
+
+      render("start");
+    </script>
+  </body>
+</html>
