@@ -1,0 +1,23 @@
+{
+  "name": "piggy-bank",
+  "version": "1.0.0",
+  "description": "",
+  "main": "piggy.js",
+  "scripts": {
+    "dev": "npx http-server",
+    "cy:open": "npx cypress open",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liquid1982/piggy-bank.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liquid1982/piggy-bank/issues"
+  },
+  "homepage": "https://github.com/liquid1982/piggy-bank#readme",
+  "dependencies": {},
+  "devDependencies": {}
+}
