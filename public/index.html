@@ -7,12 +7,12 @@
     <title>Piggy Bank</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="app"></div>
 
     <template id="start">
       <h1>Welcome!</h1>
       <p>Please enter your name to create a new piggy bank:</p>
-      <form action="javascript:create()">
+      <form action="javascript:dispatch('create')">
         <input type="text" class="user-name" />
         <input type="submit" value="Create" />
       </form>
@@ -22,15 +22,15 @@
       <h1 class="title"><span class="owner"></span>'s Piggy Bank</h1>
       <h3>Current amount: <span class="amount"></span></h3>
       <p>
-        <button onclick="display('deposit')">Deposit</button>
-        <button onclick="display('smash')">Smash</button>
+        <button onclick="dispatch('deposit')">Deposit</button>
+        <button onclick="dispatch('smash')">Smash</button>
       </p>
     </template>
 
     <template id="deposit">
       <h1 class="title"><span class="owner"></span>'s Piggy Bank</h1>
       <h3>How many coins do you want to deposit?</h3>
-      <form action="javascript:confirmDeposit()">
+      <form action="javascript:dispatch('confirmDeposit')">
         <input type="text" class="deposit-amount" />
         <input type="submit" value="Confirm deposit" />
       </form>
@@ -38,7 +38,7 @@
 
     <template id="smash">
       <h1>Who are you?</h1>
-      <form action="javascript:confirmSmash()">
+      <form action="javascript:dispatch('confirmSmash')">
         <input type="text" class="user-name" />
         <input type="submit" value="Continue" />
       </form>
@@ -48,65 +48,11 @@
       <h1><span class="owner"></span>'s Piggy Bank has been smashed!</h1>
     </template>
 
-    <script type="module" src="piggy-bank.js"></script>
+    <script type="module" src="index.js"></script>
     <script>
-      let piggy;
-
-      function create() {
-        const user = document.querySelector(".user-name").value;
-        piggy = new PiggyBank(user);
-        display("whole");
+      function dispatch(eventName) {
+        document.dispatchEvent(new Event(eventName));
       }
-
-      function confirmDeposit() {
-        const amount = document.querySelector(".deposit-amount").value;
-
-        try {
-          piggy.deposit(amount);
-          display("whole");
-          return;
-        } catch (error) {
-          alert(error.message);
-        }
-
-        display("deposit");
-      }
-
-      function confirmSmash() {
-        let finalAmount;
-        const user = document.querySelector(".user-name").value;
-
-        try {
-          finalAmount = piggy.smash(user);
-          alert(`Here's your ${finalAmount} coins, ${user}!`);
-          display("smashed");
-          return;
-        } catch (error) {
-          alert(error.message);
-        }
-
-        display("whole");
-      }
-
-      function display(what) {
-        const template = document
-          .querySelector(`#${what}`)
-          .content.cloneNode(true);
-
-        template
-          .querySelectorAll(".amount")
-          .forEach((el) => (el.innerText = piggy?.amount));
-
-        template
-          .querySelectorAll(".owner")
-          .forEach((el) => (el.innerText = piggy?.owner));
-
-        document.querySelector("#root").innerHTML = "";
-        document.querySelector("#root").appendChild(template);
-        document.querySelector("input")?.focus();
-      }
-
-      display("start");
     </script>
   </body>
 </html>

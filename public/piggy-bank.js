@@ -48,6 +48,4 @@ class PiggyBank {
   }
 }
 
-globalThis.PiggyBank = PiggyBank;
-
 export default PiggyBank;
