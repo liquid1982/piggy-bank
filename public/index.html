@@ -8,6 +8,46 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <template id="start">
+      <h1>Welcome!</h1>
+      <p>Please enter your name to create a new piggy bank:</p>
+      <form action="javascript:create()">
+        <input type="text" class="user-name" />
+        <input type="submit" value="Create" />
+      </form>
+    </template>
+
+    <template id="whole">
+      <h1 class="title"><span class="owner"></span>'s Piggy Bank</h1>
+      <h3>Current amount: <span class="amount"></span></h3>
+      <p>
+        <button onclick="display('deposit')">Deposit</button>
+        <button onclick="display('smash')">Smash</button>
+      </p>
+    </template>
+
+    <template id="deposit">
+      <h1 class="title"><span class="owner"></span>'s Piggy Bank</h1>
+      <h3>How many coins do you want to deposit?</h3>
+      <form action="javascript:confirmDeposit()">
+        <input type="text" class="deposit-amount" />
+        <input type="submit" value="Confirm deposit" />
+      </form>
+    </template>
+
+    <template id="smash">
+      <h1>Who are you?</h1>
+      <form action="javascript:confirmSmash()">
+        <input type="text" class="user-name" />
+        <input type="submit" value="Continue" />
+      </form>
+    </template>
+
+    <template id="smashed">
+      <h1><span class="owner"></span>'s Piggy Bank has been smashed!</h1>
+    </template>
+
     <script type="module" src="piggy-bank.js"></script>
     <script>
       let piggy;
@@ -15,7 +55,7 @@
       function create() {
         const user = document.querySelector(".user-name").value;
         piggy = new PiggyBank(user);
-        render("whole");
+        display("whole");
       }
 
       function confirmDeposit() {
@@ -23,13 +63,13 @@
 
         try {
           piggy.deposit(amount);
-          render("whole");
+          display("whole");
           return;
         } catch (error) {
           alert(error.message);
         }
 
-        render("deposit");
+        display("deposit");
       }
 
       function confirmSmash() {
@@ -39,58 +79,34 @@
         try {
           finalAmount = piggy.smash(user);
           alert(`Here's your ${finalAmount} coins, ${user}!`);
-          render("smashed");
+          display("smashed");
           return;
         } catch (error) {
           alert(error.message);
         }
 
-        render("whole");
+        display("whole");
       }
 
-      function render(state) {
-        const ui = {
-          start: `
-            <h1>Welcome!</h1>
-            <p>Please enter your name to create a new piggy bank:</p>
-            <form onsubmit="create()">
-              <input type="text" class="user-name" />
-              <input type="submit" value="Create"/>
-            </form>
-          `,
-          whole: `
-            <h1 class="title">${piggy?.owner}'s Piggy Bank</h1>
-            <h3>Current amount: ${piggy?.amount}</h3>
-            <p>
-              <button onclick="render('deposit')">Deposit</button>
-              <button onclick="render('smash')">Smash</button>
-            </p>
-          `,
-          deposit: `
-            <h1 class="title">${piggy?.owner}'s Piggy Bank</h1>
-            <h3>How many coins do you want to deposit?</h3>
-            <form onsubmit="confirmDeposit()">
-              <input type="text" class="deposit-amount" />
-              <input type="submit" value="Confirm deposit" />
-            </form>
-          `,
-          smash: `
-            <h1>Who are you?</h1>
-            <form onsubmit="confirmSmash()">
-              <input type="text" class="user-name" />
-              <input type="submit" value="Continue" />
-            </form>
-          `,
-          smashed: `
-            <h1>${piggy?.owner}'s Piggy Bank has been smashed!</h1>
-          `,
-        };
+      function display(what) {
+        const template = document
+          .querySelector(`#${what}`)
+          .content.cloneNode(true);
 
-        document.querySelector("#root").innerHTML = ui[state];
+        template
+          .querySelectorAll(".amount")
+          .forEach((el) => (el.innerText = piggy?.amount));
+
+        template
+          .querySelectorAll(".owner")
+          .forEach((el) => (el.innerText = piggy?.owner));
+
+        document.querySelector("#root").innerHTML = "";
+        document.querySelector("#root").appendChild(template);
         document.querySelector("input")?.focus();
       }
 
-      render("start");
+      display("start");
     </script>
   </body>
 </html>
