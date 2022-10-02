@@ -2,49 +2,11 @@ import PiggyBank from "./piggy-bank.js";
 
 let piggy;
 
-globalThis.document.addEventListener("create", (event) => {
-  const user = document.querySelector(".user-name").value;
-  piggy = new PiggyBank(user);
-  render("whole");
-});
-
-globalThis.document.addEventListener("deposit", () => render("deposit"));
-
-globalThis.document.addEventListener("confirmDeposit", () => {
-  const amount = document.querySelector(".deposit-amount").value;
-
-  try {
-    piggy.deposit(amount);
-    render("whole");
-    return;
-  } catch (error) {
-    alert(error.message);
-  }
-
-  render("deposit");
-});
-
-globalThis.document.addEventListener("smash", () => render("smash"));
-
-globalThis.document.addEventListener("confirmSmash", () => {
-  let finalAmount;
-  const user = document.querySelector(".user-name").value;
-
-  try {
-    finalAmount = piggy.smash(user);
-    alert(`Here's your ${finalAmount} coins, ${user}!`);
-    render("smashed");
-    return;
-  } catch (error) {
-    alert(error.message);
-  }
-
-  render("whole");
-});
-
 function render(what) {
+  console.log(`Rendering ${what}...`);
+
   if (!document.querySelector(`template#${what}`)) {
-    alert(`Cannot find template with id "${what}"`);
+    console.error(`Cannot find template with id "${what}"`);
     return;
   }
 
@@ -62,5 +24,47 @@ function render(what) {
   document.querySelector("#app").appendChild(template);
   document.querySelector("input")?.focus();
 }
+
+document.addEventListener("start", () => render("start"));
+
+document.addEventListener("create", () => {
+  const user = document.querySelector(".user-name").value;
+  piggy = new PiggyBank(user);
+  render("whole");
+});
+
+document.addEventListener("deposit", () => render("deposit"));
+
+document.addEventListener("confirmDeposit", () => {
+  const amount = document.querySelector(".deposit-amount").value;
+
+  try {
+    piggy.deposit(amount);
+    render("whole");
+    return;
+  } catch (error) {
+    alert(error.message);
+  }
+
+  render("deposit");
+});
+
+document.addEventListener("smash", () => render("smash"));
+
+document.addEventListener("confirmSmash", () => {
+  let finalAmount;
+  const user = document.querySelector(".user-name").value;
+
+  try {
+    finalAmount = piggy.smash(user);
+    alert(`Here's your ${finalAmount} coins, ${user}!`);
+    render("smashed");
+    return;
+  } catch (error) {
+    alert(error.message);
+  }
+
+  render("whole");
+});
 
 render("start");
