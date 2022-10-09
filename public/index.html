@@ -18,41 +18,35 @@
     <template id="start">
       <h1>Welcome!</h1>
       <p>Please enter your name to create a new piggy bank:</p>
-      <form action="javascript:dispatch('create')">
-        <input type="text" class="user-name" />
-        <input type="submit" value="Create" />
-      </form>
+      <input type="text" class="user-name" />
+      <button onclick="dispatch('piggy:create')">Create</button>
     </template>
 
     <template id="whole">
-      <h1 class="title"><span class="owner"></span>'s Piggy Bank</h1>
-      <h3>Current amount: <span class="amount"></span></h3>
-      <p>
-        <button onclick="dispatch('deposit')">Deposit</button>
-        <button onclick="dispatch('smash')">Smash</button>
-      </p>
+      <h1><p-owner></p-owner>'s Piggy Bank</h1>
+      <h3>Current amount: <p-amount></p-amount></h3>
+      <button onclick="dispatch('piggy:deposit')">Deposit</button>
+      <button onclick="dispatch('piggy:smash')">Smash</button>
     </template>
 
     <template id="deposit">
-      <h1 class="title"><span class="owner"></span>'s Piggy Bank</h1>
+      <h1><p-owner></p-owner>'s Piggy Bank</h1>
       <h3>How many coins do you want to deposit?</h3>
-      <form action="javascript:dispatch('confirmDeposit')">
-        <input type="text" class="deposit-amount" />
-        <input type="submit" value="Confirm deposit" />
-      </form>
+      <input type="text" class="deposit-amount" />
+      <button onclick="dispatch('piggy:confirmDeposit')">
+        Confirm deposit
+      </button>
     </template>
 
     <template id="smash">
       <h1>Who are you?</h1>
-      <form action="javascript:dispatch('confirmSmash')">
-        <input type="text" class="user-name" />
-        <input type="submit" value="Continue" />
-      </form>
+      <input type="text" class="user-name" />
+      <button onclick="dispatch('piggy:confirmSmash')">Continue</button>
     </template>
 
     <template id="smashed">
-      <h1><span class="owner"></span>'s Piggy Bank has been smashed!</h1>
-      <button onclick="dispatch('start')">Start over</button>
+      <h1><p-owner></p-owner>'s Piggy Bank has been smashed!</h1>
+      <button onclick="dispatch('piggy:start')">Start over</button>
     </template>
   </body>
 </html>

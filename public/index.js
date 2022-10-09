@@ -2,40 +2,44 @@ import PiggyBank from "./piggy-bank.js";
 
 let piggy;
 
-function render(what) {
-  console.log(`Rendering ${what}...`);
+render("start");
 
+document.addEventListener("piggy:start", () => render("start"));
+document.addEventListener("piggy:create", createHandler);
+document.addEventListener("piggy:deposit", () => render("deposit"));
+document.addEventListener("piggy:confirmDeposit", confirmDepositHandler);
+document.addEventListener("piggy:smash", () => render("smash"));
+document.addEventListener("piggy:confirmSmash", confirmSmashHandler);
+
+function render(what) {
   if (!document.querySelector(`template#${what}`)) {
-    console.error(`Cannot find template with id "${what}"`);
+    console.error(`Template "${what}" not found`);
     return;
   }
 
   const template = document.querySelector(`#${what}`).content.cloneNode(true);
-
-  template
-    .querySelectorAll(".amount")
-    .forEach((el) => (el.innerText = piggy?.amount));
-
-  template
-    .querySelectorAll(".owner")
-    .forEach((el) => (el.innerText = piggy?.owner));
-
+  updatePlaceholders(template);
   document.querySelector("#app").innerHTML = "";
   document.querySelector("#app").appendChild(template);
   document.querySelector("input")?.focus();
 }
 
-document.addEventListener("start", () => render("start"));
+function updatePlaceholders(template) {
+  [
+    ["p-owner", piggy?.owner],
+    ["p-amount", piggy?.amount],
+  ].forEach(([selector, value]) => {
+    template.querySelectorAll(selector).forEach((el) => (el.innerText = value));
+  });
+}
 
-document.addEventListener("create", () => {
+function createHandler() {
   const user = document.querySelector(".user-name").value;
   piggy = new PiggyBank(user);
   render("whole");
-});
+}
 
-document.addEventListener("deposit", () => render("deposit"));
-
-document.addEventListener("confirmDeposit", () => {
+function confirmDepositHandler() {
   const amount = document.querySelector(".deposit-amount").value;
 
   try {
@@ -47,11 +51,9 @@ document.addEventListener("confirmDeposit", () => {
   }
 
   render("deposit");
-});
+}
 
-document.addEventListener("smash", () => render("smash"));
-
-document.addEventListener("confirmSmash", () => {
+function confirmSmashHandler() {
   let finalAmount;
   const user = document.querySelector(".user-name").value;
 
@@ -65,6 +67,4 @@ document.addEventListener("confirmSmash", () => {
   }
 
   render("whole");
-});
-
-render("start");
+}
