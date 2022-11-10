@@ -13,3 +13,7 @@ Create a piggy bank, and add tests to ensure it works as intended.
 ## Flow Diagram
 
 Please see `piggy.excalidraw` for a flow diagram.
+
+## Demo app
+
+A demo app is available at [this address](https://the-piggy-bank.vercel.app/).
