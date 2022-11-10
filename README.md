@@ -1,6 +1,6 @@
 # Piggy Bank Exercise
 
-Create a piggy bank, and add tests to ensure it works as intended.
+Create a simple piggy bank app, and add tests to ensure it works as defined by the acceptance criteria listed below.
 
 ## Acceptance Criteria
 
@@ -8,7 +8,7 @@ Create a piggy bank, and add tests to ensure it works as intended.
 - Anyone can deposit coins in the piggy bank.
 - Only the owner can smash the piggy bank.
 - When smashing the piggy bank, we want to return the stored coins.
-- After the piggy bank has been smashed, it is impossible to deposit more coins.
+- After the piggy bank has been smashed, it is impossible to deposit any more coins.
 
 ## Flow Diagram
 
