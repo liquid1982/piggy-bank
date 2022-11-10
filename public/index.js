@@ -2,14 +2,84 @@ import PiggyBank from "./piggy-bank.js";
 
 let piggy;
 
-render("start");
-
+/**
+ * `piggy:start` event
+ * ---
+ * First screen of the app. It renders a form where the user can provide their name.
+ */
 document.addEventListener("piggy:start", () => render("start"));
-document.addEventListener("piggy:create", createHandler);
+
+/**
+ * `piggy:create` event
+ * ---
+ * Creates a new piggy bank and shows the balance to the user.
+ */
+document.addEventListener("piggy:create", () => {
+  const user = document.querySelector(".user-name").value;
+  piggy = new PiggyBank(user);
+  render("whole");
+});
+
+/**
+ * `piggy:deposit` event
+ * ---
+ * Renders the deposit screen.
+ */
 document.addEventListener("piggy:deposit", () => render("deposit"));
-document.addEventListener("piggy:confirmDeposit", confirmDepositHandler);
+
+/**
+ * `piggy:confirmDeposit` event
+ * ---
+ * Confirms the deposit and displays the balance. If an error occurs, displays
+ * the error to the user.
+ */
+document.addEventListener("piggy:confirmDeposit", () => {
+  const amount = document.querySelector(".deposit-amount").value;
+
+  try {
+    piggy.deposit(amount);
+    render("whole");
+    return;
+  } catch (error) {
+    alert(error.message);
+  }
+
+  render("deposit");
+});
+
+/**
+ * `piggy:smash` event
+ * ---
+ * Renders a form that asks the user to provide their name.
+ */
 document.addEventListener("piggy:smash", () => render("smash"));
-document.addEventListener("piggy:confirmSmash", confirmSmashHandler);
+
+/**
+ * `piggy:confirmSmash` event
+ * ---
+ * Tries to smash the piggy bank. If the user is different from
+ * the piggy bank owner, it shows an error.
+ */
+document.addEventListener("piggy:confirmSmash", () => {
+  let finalAmount;
+  const user = document.querySelector(".user-name").value;
+
+  try {
+    finalAmount = piggy.smash(user);
+    alert(`Here's your ${finalAmount} coins, ${user}!`);
+    render("smashed");
+    return;
+  } catch (error) {
+    alert(error.message);
+  }
+
+  render("whole");
+});
+
+/**
+ * Render the "start" template and bootstrap the app.
+ */
+render("start");
 
 function render(what) {
   if (!document.querySelector(`template#${what}`)) {
@@ -31,40 +101,4 @@ function updatePlaceholders(template) {
   ].forEach(([selector, value]) => {
     template.querySelectorAll(selector).forEach((el) => (el.innerText = value));
   });
-}
-
-function createHandler() {
-  const user = document.querySelector(".user-name").value;
-  piggy = new PiggyBank(user);
-  render("whole");
-}
-
-function confirmDepositHandler() {
-  const amount = document.querySelector(".deposit-amount").value;
-
-  try {
-    piggy.deposit(amount);
-    render("whole");
-    return;
-  } catch (error) {
-    alert(error.message);
-  }
-
-  render("deposit");
-}
-
-function confirmSmashHandler() {
-  let finalAmount;
-  const user = document.querySelector(".user-name").value;
-
-  try {
-    finalAmount = piggy.smash(user);
-    alert(`Here's your ${finalAmount} coins, ${user}!`);
-    render("smashed");
-    return;
-  } catch (error) {
-    alert(error.message);
-  }
-
-  render("whole");
 }
