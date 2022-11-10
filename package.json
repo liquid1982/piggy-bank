@@ -20,7 +20,7 @@
   "homepage": "https://github.com/liquid1982/piggy-bank#readme",
   "dependencies": {},
   "devDependencies": {
-    "cypress": "^10.8.0",
+    "cypress": "^11.0.1",
     "http-server": "^14.1.1",
     "vite": "^3.1.3",
     "vitest": "^0.23.4"
