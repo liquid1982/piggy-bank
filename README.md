@@ -1,6 +1,6 @@
 # Piggy Bank Exercise
 
-Create a simple piggy bank app, and add tests to ensure it works as defined by the acceptance criteria listed below.
+Create a simple piggy bank app, and add tests to ensure it works as described by the acceptance criteria listed below.
 
 ## Acceptance Criteria
 
